@@ -1,9 +1,31 @@
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
+const fs = require('fs');
 
-var server = http.createServer(function(req, res) {
+var httpServer = http.createServer(function(req, res) {
+	unifiedServer(req, res);
+});
+
+httpServer.listen(config.httpPort, function() {
+	console.log("This server is listening on port "+config.httpPort+" in "+config.envName+" mode.");
+});
+
+var httpsServerOptions = {
+	'key' : fs.readFileSync('./https/key.pem'),
+	'cert' : fs.readFileSync('./https/cert.pem')
+};
+var httpsServer = https.createServer(httpsServerOptions, function(req, res) {
+	unifiedServer(req, res);
+});
+
+httpsServer.listen(config.httpsPort, function() {
+	console.log("This server is listening on port "+config.httpsPort+" in "+config.envName+" mode.");
+});
+
+var unifiedServer = function(req, res) {
 	var parsedUrl = url.parse(req.url, true);
 
 	var path = parsedUrl.pathname;
@@ -48,11 +70,7 @@ var server = http.createServer(function(req, res) {
 		// console.log('Request received with these headers: ', headers);
 		// console.log('Request received with these payload: ', buffer);
 	});
-});
-
-server.listen(config.port, function() {
-	console.log("This server is listening on port "+config.port+" in "+config.envName+" mode.");
-});
+}
 
 var handlers = {};
 
