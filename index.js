@@ -2,8 +2,10 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
-const config = require('./config');
+const config = require('./lib/config');
 const fs = require('fs');
+const handlers = require('./lib/handlers');
+const helpers = require('./lib/helpers');
 
 
 
@@ -52,7 +54,7 @@ var unifiedServer = function(req, res) {
 			'queryStringObject' :  queryStringObject,
 			'method' : method,
 			'headers' : headers,
-			'payload' : buffer
+			'payload' : helpers.parseJsonToObject(buffer)
 		};
 
 		chosenHandler(data, function(statusCode, payload) {
@@ -74,18 +76,8 @@ var unifiedServer = function(req, res) {
 	});
 }
 
-var handlers = {};
-
-handlers.ping = function(data, callback) {
-	callback(200);
-	// callback(406, {'name' : 'ping handler'});
-};
-
-handlers.notFound = function(data, callback) {
-	callback(404);
-};
-
 var router = {
 	'ping' : handlers.ping,
 	'notFound' : handlers.notFound,
+	'users' : handlers.users
 };
