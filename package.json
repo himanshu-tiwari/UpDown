@@ -1,0 +1,6 @@
+{
+	"dependencies": {
+		"nexmo": "^2.4.0",
+		"springedge": "^1.0.5"
+	}
+}
