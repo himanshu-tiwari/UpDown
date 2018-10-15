@@ -126,7 +126,6 @@ app.bindForms = function(){
 app.formResponseProcessor = function(formId,requestPayload,responsePayload){
 	var functionToCall = false;
 	if(formId == 'accountCreate'){
-		console.log("The accountCreate form was successfully submitted!");
 		// @TODO Do something here now that the account has been created successfully
 	}
 };
