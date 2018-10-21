@@ -1,4 +1,4 @@
 .data/
 .logs/
-lib/config.js
+lib/config
 node_modules
